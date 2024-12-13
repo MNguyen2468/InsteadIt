@@ -1,0 +1,224 @@
+/*FriendsPage.css*/
+/* Global styles */
+.friends-page .leftBar {
+  flex: 1; /* Shrink the left bar */
+  max-width: 200px; /* Set a max width */
+}
+.friends-page .leftBar .container {
+  padding: 10px; /* Reduce padding for a smaller appearance */
+}
+
+.friends-page .leftBar .container .menu span,
+.friends-page .leftBar .container .menu .user span {
+  font-size: 12px; /* Reduce font size */
+}
+
+.friends-page .leftBar .container .menu .item img,
+.friends-page .leftBar .container .menu .user img {
+  width: 24px; /* Reduce image size */
+  height: 24px;
+}
+
+
+body, html {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+.nav-header.theme-dark {
+  background-color: #2e2e2e;
+  border-bottom: 1px solid #444;
+}
+.nav-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+.nav-header h1.theme-dark {
+  color: #ddd;
+}
+.nav-header .back-button,
+.nav-header .home-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+.nav-header .back-button:hover,
+.nav-header .home-button:hover {
+  text-decoration: underline;
+}
+.nav-header .back-button.theme-dark,
+.nav-header .home-button.theme-dark {
+  color: #66b0ff;
+}
+
+.friends-content {
+  display: flex;
+  justify-content: flex-start; /* Align content at the top */
+  flex-direction: column; /* Ensure content is stacked vertically */
+  width: 100%;
+  height: auto; /* Allow height to adjust based on content */
+  padding: 0; /* Remove any extra padding */
+}
+
+/* Friends Page Styles */
+.friends-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f0f0;
+}
+.friends-page.theme-dark {
+  background-color: #1e1e1e;
+}
+
+/* Friends Header */
+.friends-header {
+  /* border-radius: 15px; */
+  display: flex;
+  /* justify-content: space-between; */
+  justify-content: center;
+  align-items: center;
+  /* padding: 10px 20px; */
+  min-width: 250px;
+  /* max-width: 900px; */
+  width: 85%;
+  /* this fixes the width scaling issue */
+  max-width: 765px;
+  padding: 20px 0px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.friends-header.theme-dark {
+  background-color: #2e2e2e;
+  border-bottom: 1px solid #444;
+}
+.friends-header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #333;
+}
+.friends-header h1.theme-dark {
+  color: #ddd;
+}
+
+/* Friends List */
+.friend-list {
+  margin: 0; /* Remove any margin */
+  padding: 0; /* Remove padding to prevent extra space */
+  display: flex; /* Add this */
+  flex-direction: column;
+  /* align-items: center; Centers all friend items */
+  /* width: 100%; */
+  min-width: 250px;
+  max-width: 900px;
+  width: 85%;
+  background-color: rgb(240, 240, 240);
+  /* background-color: transparent; */
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+.friend-list.theme-dark {
+  background-color: #2e2e2e;
+  border-right: 1px solid #444;
+}
+.friend-list-container {
+  display: flex;
+  flex-direction: column; /* Stack header and list vertically */
+  align-items: center; /* Center align the content horizontally */
+  width: 100%; /* You can adjust this width to match your design */
+  max-width: 900px; /* Optional: Set a max width */
+  margin: 0 auto; /* Center the container */
+  flex-grow: 1; /* Allow it to grow with content */
+  height: auto; /* Ensure no fixed height so it adjusts with content */
+}
+.friend-list-item {
+  border-radius: 15px;
+  flex-direction: horizontal;
+  align-items: center; /* Centers all friend items */
+  padding: 18px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+.friend-list-item:hover {
+  background-color: #e6e6e6;
+}
+.friend-list-item.active {
+  background-color: #d9d9d9;
+}
+
+/* Friend Avatar */
+.friend-avatar {
+  margin-right: 10px;
+}
+.friend-avatar img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+}
+.avatar-placeholder {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+  color: #fff;
+  font-size: 36px;
+}
+
+/* Friend Details */
+.friend-details {
+  display: flex;
+  flex-direction: horizontal;
+  gap: 20px; /* Adjust this value to control the space between elements */
+}
+.friend-displayName {
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+}
+.friend-username {
+  font-size: 24px;
+  color: #666;
+  margin: 0 auto;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+

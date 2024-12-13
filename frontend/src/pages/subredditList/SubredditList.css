@@ -1,0 +1,364 @@
+.subreddit-page.theme-dark {
+  background-color: #1e1e1e;
+}
+
+.subreddit-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.subreddit-toggle {
+  display: flex;
+  gap: 10px; /* Adds space between the buttons */
+  margin-top: 10px; /* Adds space between the header and buttons */
+}
+
+.create-subreddit-button {
+  width: auto; /* Allow the button to adjust to the content size */
+  height: 50px; 
+  padding: 0 20px; /* Added horizontal padding to create space for text */
+  background-color: #663399;/*#28bd7f;*/
+  color: white;
+  border: none;
+  border-radius: 5px; /* rectangular shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px; 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute; /* This will position it relative to the header */
+  right: 20px; /* Moves the button to the right */
+  top: 10px; 
+}
+
+/* Hover effect color change*/
+.create-subreddit-button:hover {
+  background-color: rgb(90, 46, 140);/*#1a8f5f;*/ /* Darker shade on hover for better interaction */
+}
+
+.toggle-button {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 15px;
+}
+
+/* Active Button Styling */
+.toggle-button.active {
+  color: #fff;
+  background-color: #333;
+  border-color: #333;
+}
+
+/* Removing hover effect for the active button */
+.toggle-button.active:hover {
+  background-color: #333; 
+  color: #fff;
+  border-color: #333;
+}
+
+/* Removing hover effect for non-active buttons */
+.toggle-button:hover:not(.active) {
+  background-color: #ffffff; 
+  color: inherit;
+}
+
+.toggle-button.active {
+  color: #fff;
+  background-color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Content and List styling */
+.subreddit-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to the top */
+  width: 100%;
+}
+
+.subreddit-list-container {
+  width: 100%;
+  max-width: 1000px;
+  flex: 1; /* Allow this container to take up available space */
+  display: flex;
+  flex-direction: column;
+}
+
+.subreddit-list-container.theme-dark {
+  background-color: #2e2e2e;
+  border: 1px solid #444;
+}
+
+.subreddit-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.subreddit-list-item {
+  display: flex;
+  padding: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.subreddit-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ccc;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.subreddit-details {
+  margin-left: 10px;
+}
+
+.subreddit-name {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.subreddit-description {
+  font-size: 15px;
+  color: #777;
+}
+
+.no-subreddits-message {
+  font-size: 18px;
+  color: #777;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.pagination-buttons button {
+  padding: 8px 16px;
+  margin: 0;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.pagination-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.pagination-buttons button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #ccc;
+}
+
+
+.page-button.active {
+  background-color: #007bff;
+  color: black;
+  border-radius: 5px;
+}
+
+.items-and-page-skip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.items-to-show-input,
+.page-skip-input {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.items-to-show-input input,
+.page-skip-input input {
+  margin-left: 10px;
+  width: 60px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Submit button */
+.subreddit-page .popup-content .submit-button {
+  background-color: #28bd7f;
+  color: #ffffff;
+}
+.subreddit-page .popup-content .submit-button:hover {
+  background-color: #1a8f5f;
+  color: #ffffff;
+}
+
+/* Cancel button */
+.subreddit-page .popup-content .cancel-button {
+  background-color: #ff6b6b;
+  color: #ffffff;
+}
+
+.subreddit-page .popup-content .cancel-button:hover {
+  background-color: #ff5252;
+  color: #ffffff;
+}
+
+/* Dark mode styles */
+.subreddit-page.theme-dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Dark mode header */
+.subreddit-page.theme-dark h1 {
+  color: #ffffff;
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+/* Dark mode toggle buttons */
+.subreddit-page.theme-dark .toggle-button {
+  background-color: #2d2d2d;
+  color: #cccccc;
+  border-color: #404040;
+}
+
+.subreddit-page.theme-dark .toggle-button.active {
+  background-color: #ffffff;
+  color: black;
+  border-color: #505050;
+}
+
+/* Dark mode subreddit list items */
+.subreddit-page.theme-dark .subreddit-list-item {
+  background-color: #2d2d2d;
+  border-color: #404040;
+  color: #ffffff;
+}
+
+.subreddit-page.theme-dark .subreddit-description {
+  color: #cccccc;
+}
+
+/* Dark mode avatar placeholder */
+.subreddit-page.theme-dark .avatar-placeholder {
+  background-color: #404040;
+}
+
+/* Dark mode inputs */
+.subreddit-page.theme-dark .items-to-show-input select,
+.subreddit-page.theme-dark .page-skip-input input {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+.subreddit-page.theme-dark label {
+  color: #ffffff;
+}
+
+/* Dark mode pagination buttons */
+.subreddit-page.theme-dark .pagination-buttons button {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+.subreddit-page.theme-dark .pagination-buttons button:hover:not(.disabled) {
+  background-color: #3396ff;
+}
+
+.subreddit-page.theme-dark .pagination-buttons button.disabled {
+  background-color: #404040;
+  color: #888888;
+}
+
+/* Dark mode popup */
+.subreddit-page.theme-dark .popup {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.subreddit-page.theme-dark .popup-content {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+.subreddit-page.theme-dark .popup-content input,
+.subreddit-page.theme-dark .popup-content textarea {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+/* Dark mode no subreddits message */
+.subreddit-page.theme-dark .no-subreddits-message {
+  color: #cccccc;
+}
+
+/* Dark mode scrollbar */
+.subreddit-page.theme-dark ::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.subreddit-page.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #404040;
+}
+
+.subreddit-page.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #505050;
+}
+

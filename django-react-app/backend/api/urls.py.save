@@ -1,0 +1,54 @@
+# Path to this file /home/ec2-user/Demo-Web/django-react-app/backend/api/urls.py
+
+from django.urls import path
+#from .views import HelloWorldView, show_data, get_table_data, register_user, LoginView, create_forum_entry, create_subreddit_entry, get_user_data, update_user_profile, get_mutual_followers, get_userid_data, get_chat_messages, create_message, is_following, unfollow_user, follow_user
+
+from .views import (
+    HelloWorldView,
+    show_data,
+    get_table_data,
+    register_user,
+    LoginView,
+    create_forum_entry,
+    create_subreddit_entry,
+    get_user_data,
+    update_user_profile,
+    get_mutual_followers,
+    get_userid_data,
+    get_chat_messages,
+    create_message,
+    is_following,
+    unfollow_user,
+    follow_user,
+    get_user_following,
+    get_following_me,
+    get_recent_forum,
+)
+
+urlpatterns = [
+    path('hello/', HelloWorldView.as_view(), name='hello_world'),
+    path('show-data/', show_data, name='show_data'),  # New route for showing data
+    path('get-table-data/', get_table_data, name='get_table_data'),  # New API route for React
+    path('register/', register_user, name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    
+    #Jahdon's Changes
+    path('create-forum/', create_forum_entry, name='create_forum'),
+    path('create-subreddit/', create_subreddit_entry, name = 'create_subreddit'),
+
+    path('user/<str:un>/', get_user_data, name='get_user_data'),
+    path('userid/<int:uid>/', get_userid_data, name='get_userid_data'),
+    path('update-profile/<int:userID>/', update_user_profile, name='update_user_profile'),
+
+    path('user-following/<int:user_id>/', get_user_following, name='get_user_following'),
+    path('following-me/<int:user_id>/', get_following_me, name='get_following_me'),
+    path('mutual-followers/<int:user_id>/', get_mutual_followers, name='mutual-followers'),
+    path('messages/<int:sender_id>/<int:receiver_id>/', get_chat_messages, name='get_chat_messages'),
+    path('create-message/', create_message, name='create_message'),
+
+    path('is-following/<str:logged_in_username>/<str:username>/', is_following, name='is_following'),
+    path('unfollow/<str:logged_in_username>/<str:username>/', unfollow_user, name='unfollow_user'),
+    path('follow/<str:logged_in_username>/<str:username>/', follow_user, name='follow_user'),
+    path('recent-forums/<int:subbreddit_id>/<int:start>/<int:end>/', get_recent_forum, name='get_recent_forum'),
+]
+

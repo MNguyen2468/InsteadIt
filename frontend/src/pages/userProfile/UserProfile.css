@@ -1,0 +1,428 @@
+/* UserProfile.css */
+.profile-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 20px auto;
+  height: 100%;
+  max-width: 1000px;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* Main profile section */
+.profile-main {
+  font-size: 20px;
+  font-family: 'Georgia';
+  width: 100%;
+  background-color: #d6d4d4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Profile header aligns with the edit button */
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  width: 100%;
+  gap: 50px;
+  padding-left: 20px;
+  margin-bottom: 50px;
+}
+
+.profile-header h1 {
+  text-align: left;
+  margin: 0;
+  margin-top: 30px;
+}
+
+.edit-profile-btn {
+  font-size: 20px;
+  font-family: 'Georgia';
+  background-color: #fd9b5a;
+  color: rgb(0, 0, 0);
+  padding: 8px 16px;
+  height: 40px;
+  color: whitesmoke;
+}
+
+.edit-profile-btn:hover {
+  background-color: #ff7b00;
+}
+
+.profile-pic {
+  margin-top: 10px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 30px;
+  gap: 20px;
+}
+
+.profile-pic img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Placeholder profile picture */
+.placeholder-pic {
+  width: 120px;
+  height: 120px;
+  background-color: #cccccc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  color: #ffffff;
+  object-fit: cover;
+}
+
+/* Sidebar styling */
+.sidebar {
+  font-family:'Georgia';
+  font-size: 20px;
+  width: 25%;
+  margin-left: 20px;
+  background-color: #d1cece85;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  height: 50vh;
+  position: sticky;
+  top: 0;
+}
+
+/* Styling for editable fields */
+.editable-field {
+  background-color: rgba(255, 255, 255, 0.541);
+  width: 100%;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.editable-field p {
+  margin: 0;
+  text-align: left;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.editable-field p strong {
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.editable-field p span {
+  flex-grow: 1;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.editable-field input,
+.editable-field textarea {
+  width: 100%;
+  text-align: left;
+}
+
+button {
+  background-color: #007bff;
+  color: rgb(0, 0, 0);
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  color: black;
+}
+
+button:hover {
+  background-color: #07eeff;
+}
+
+/* Delete button styling */
+.delete-btn {
+  font-size: 16px;
+  font-family: 'Georgia';
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff0000;
+  color: #fffdfd;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.profile-info {
+  font-size: 26px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Add new style for username text */
+.profile-info > p {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+/* Center the editable fields but left-align text */
+.editable-field {
+  background-color: rgba(255, 255, 255, 0.541);
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.editable-field p {
+  margin: 0;
+  text-align: left;
+  margin-bottom: 15px;
+  font-size: 26px;
+}
+
+.editable-field input,
+.editable-field textarea {
+  width: 100%;
+  text-align: left;
+  
+}
+
+/* Center action buttons */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.gallery-btn {
+  font-size: 20px;
+  font-family: 'Georgia';
+  background-color: #007bff;
+  padding: 8px 16px;
+  height: 40px;
+  color: whitesmoke;
+}
+
+.gallery-btn:hover {
+  background-color: #0066ff;
+}
+
+/* Add new style for editing state */
+.editable-field.editing {
+  width: 100%; /* Smaller width when editing */
+}
+
+.editable-field input,
+.editable-field textarea {
+  width: 100%;
+  text-align: left;
+  margin-top: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.editable-field textarea {
+  width: 99%;
+  text-align: left;
+  margin-top: 5px;
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Only allow vertical resizing */
+  min-height: 100px; 
+}
+
+.save-changes-btn, .cancel-btn {
+  font-size: 20px; /* Increased font size */
+  font-family: 'Georgia';
+  background-color: #007bff;
+  color: whitesmoke;
+  padding: 8px 16px;
+  height: 40px;
+}
+
+.save-changes-btn:hover, .cancel-btn:hover {
+  background-color: #0066ff;
+}
+
+/* Optional: make cancel button visually distinct */
+.cancel-btn {
+  background-color: #ff6b6b;
+}
+
+.cancel-btn:hover {
+  background-color: #ff5252;
+}
+
+.profile-pic label {
+  font-size: 20px;
+  font-family: 'Georgia';
+  margin-top: 30px;
+  display: block;
+}
+
+.file-type-text {
+  font-size: 20px;
+  font-family: 'Georgia';
+  color: #666;
+  display: block;
+  margin-top: 10px;
+}
+
+.custom-file-upload {
+  font-size: 20px;
+  font-family: 'Georgia';
+  padding: 5px 10px;
+  margin-right: 15px;
+  margin-top: 10px;
+  background-color: #28bd7f;
+  color: whitesmoke;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  
+}
+
+.profile-pic input[type="file"] {
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+/* Add custom styling for the file input button */
+.profile-pic input[type="file"]::file-selector-button {
+  font-size: 20px;
+  font-family: 'Georgia';
+  padding: 5px 10px;
+  margin-right: 15px;
+  background-color: #28bd7f; /* Green color */
+  color: whitesmoke;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-pic input[type="file"]::file-selector-button:hover {
+  background-color: #0066ff;
+}
+
+/* Add new style for follow button */
+.follow-btn {
+  font-size: 20px;
+  font-family: 'Georgia';
+  background-color: #007bff;
+  color: whitesmoke;
+  padding: 8px 16px;
+  height: 40px;
+  margin-top: 30px;
+}
+
+.follow-btn:hover {
+  background-color: #0066ff;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-content h1 {
+  margin: 0;
+  margin-top: 30px;
+}
+
+.custom-file-upload {
+  font-size: 20px;
+  font-family: 'Georgia';
+  padding: 5px 10px;
+  margin-right: 15px;
+  background-color: #28bd7f; 
+  color: whitesmoke;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+  width: 132px;
+}
+
+/* Dark mode styles */
+.profile-container.darkMode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+.profile-main.darkMode {
+  background-color: #1a1a1a;
+}
+
+.profile-main.darkMode .editable-field p {
+  color: #ffffff;
+}
+
+.profile-main.darkMode .editable-field input,
+.profile-main.darkMode .editable-field textarea {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+.profile-main.darkMode .file-type-text {
+  color: #cccccc;
+}
+
+.profile-main.darkMode .placeholder-pic {
+  background-color: #404040;
+  color: #ffffff;
+}
+
+/* Update the editable field background in dark mode */
+.profile-main.darkMode .editable-field {
+  background-color: #3b3b3b; /* Dark background */
+  color: #ffffff;
+  border: 1px solid #404040; /* Add subtle border for definition */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adjust shadow for dark mode */
+}
+
+
+/* Ensure input fields are visible in dark mode */
+.profile-main.darkMode .editable-field input,
+.profile-main.darkMode .editable-field textarea {
+  background-color: #2d2d2d; /* Slightly lighter than container for contrast */
+  color: #ffffff;
+  border-color: #404040;
+}
+

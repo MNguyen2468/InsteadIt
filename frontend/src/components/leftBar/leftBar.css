@@ -1,0 +1,215 @@
+.leftBar {
+  width: 250px;
+  background-color: #938eef;  /* White background for the LeftBar */
+  padding: 10px;
+  z-index: 1000;
+}
+
+.leftBar .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /**/
+}
+
+.leftBar .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.leftBar .item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;  /* Consistent padding for all items */
+  background-color: rgb(193, 190, 255);  /* Purple color for the button */
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;  /* Smooth transition for hover effect */
+  border: none;  /* No borders around items */
+  margin-bottom: 10px;  /* Ensure no margins */
+  border-radius: 30px
+}
+
+.leftBar .item img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.leftBar .item:hover {
+  background-color: rgb(211, 205, 255);  /* Lighter shade of purple on hover */
+}
+
+.leftBar .item span {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Left bar specific styles for dark mode */
+.theme-dark .leftBar {
+  width: 250px;  /* Consistent width */
+  flex: 0;  /* No flex resizing */
+  position: fixed;  /* Fix to the left side of the screen */
+  top: 70px;  /* Position the bar below the top header */
+  left: 0;  /* Align the left side of the bar */
+  height: calc(100vh - 70px);  /* Full height minus the header height */
+  overflow: scroll;
+  background-color: #222;  /* Dark background */
+  color: whitesmoke;  /* Text color */
+  padding: 10px;  /* Consistent padding */
+  z-index: 1000;  /* Ensure it stays on top */
+}
+
+@media (max-width: 480px) {
+  .theme-dark .leftBar {
+    display: none;  /* Hide left bar on small screens */
+  }
+}
+
+.theme-dark .leftBar::-webkit-scrollbar {
+  display: none;  /* Hide the scrollbar */
+}
+
+.theme-dark .leftBar .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.theme-dark .leftBar .container .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-content {
+  display: flex;
+  gap: 10px;
+  padding-left: 250px;  /* Make space for the left bar */
+}
+
+
+
+
+/*.theme-light .leftBar {
+  flex: 2;
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  overflow: scroll;
+  background-color: white;
+  color: #D8BFD8;
+}
+@media (max-width: 480px) {
+  .theme-light .leftBar {
+    display: none;
+  }
+}
+.theme-light .leftBar::-webkit-scrollbar {
+  display: none;
+}
+.theme-light .leftBar .container {
+  padding: 20px;
+}
+.theme-light .leftBar .container hr {
+  margin: 20px 0px;
+  border: none;
+  height: 0.5px;
+  background-color: lightgray;
+}
+.theme-light .leftBar .container .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.theme-light .leftBar .container .menu span {
+  font-size: 12px;
+}
+.theme-light .leftBar .container .menu .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-light .leftBar .container .menu .user img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.theme-light .leftBar .container .menu .user span {
+  font-size: 14px;
+}
+.theme-light .leftBar .container .menu .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-light .leftBar .container .menu .item img {
+  width: 30px;
+}
+.theme-light .leftBar .container .menu .item span {
+  font-size: 14px;
+}
+.theme-dark .leftBar {
+  flex: 2;
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  overflow: scroll;
+  background-color: #222;
+  color: whitesmoke;
+}
+@media (max-width: 480px) {
+  .theme-dark .leftBar {
+    display: none;
+  }
+}
+.theme-dark .leftBar::-webkit-scrollbar {
+  display: none;
+}
+.theme-dark .leftBar .container {
+  padding: 20px;
+}
+.theme-dark .leftBar .container hr {
+  margin: 20px 0px;
+  border: none;
+  height: 0.5px;
+  background-color: #444;
+}
+.theme-dark .leftBar .container .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.theme-dark .leftBar .container .menu span {
+  font-size: 12px;
+}
+.theme-dark .leftBar .container .menu .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-dark .leftBar .container .menu .user img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.theme-dark .leftBar .container .menu .user span {
+  font-size: 14px;
+}
+.theme-dark .leftBar .container .menu .item {
+  display: flex;
+ align-items: center;
+  gap: 10px;
+}
+.theme-dark .leftBar .container .menu .item img {
+  width: 30px;
+}
+.theme-dark .leftBar .container .menu .item span {
+  font-size: 14px;
+}*/
+
+/* # sourceMappingURL=leftBar.css.map */

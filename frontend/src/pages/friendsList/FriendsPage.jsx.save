@@ -1,0 +1,226 @@
+// src/pages/friends/FriendsPage.jsx
+import React, { useState, useEffect, useContext } from 'react';
+import './FriendsPage.css'; // Ensure you have this stylesheet for styling
+import { AuthContext } from '../../context/authContext';
+import { DarkModeContext } from '../../context/darkModeContext';
+import { useNavigate } from 'react-router-dom';
+
+// Main FriendsPage Component
+const FriendsPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  const { darkMode } = useContext(DarkModeContext);
+
+  const [friends, setFriends] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [follower, setFollower] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState('');
+
+  const navigate = useNavigate();
+  const authToken = localStorage.getItem('accessToken');
+  const loggedInUsername = localStorage.getItem('username');
+  const currentUserApi = `http://3.140.132.61/api/user/${loggedInUsername}/`;
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(currentUserApi);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUserApi]);
+
+  const fetchUserDetails = async (followerID) => {
+    const response = await fetch(`http://3.140.132.61/api/userid/${followerID}/`);
+    if (!response.ok) {
+      throw new Error(`Error fetching user details for ID ${followerID}`);
+    }
+    return response.json();
+  };
+
+  const fetchFriends = async () => {
+    if (!userData || !userData.userID) {
+      return; // Exit if userData is not ready
+    }
+
+    try {
+      const response = await fetch(`http://3.140.132.61/api/mutual-followers/${userData?.userID}/`);
+      
+      const mutualFollowers = await response.json();
+
+      const userPromises = mutualFollowers.map(async (user) => {
+        const userDetails = await fetchUserDetails(user.followerID);
+        return {
+          followerID: user.followerID,
+          username: userDetails.username,
+          displayName: userDetails.displayName,
+          avatar: userDetails.avatar || '',
+        };
+      });
+
+      const friendsWithDetails = await Promise.all(userPromises);
+      setFriends(friendsWithDetails);
+    } catch (error) {
+      console.error('Error fetching friends:', error);
+    }
+  };
+  
+  const fetchFollowing = async () => {
+    if (!userData || !userData.userID) {
+      return; // Exit if userData is not ready
+    }
+
+    try {
+      const response = await fetch(`http://3.140.132.61/api/user-following/${userData?.userID}/`);
+      const theFollowing = await response.json();
+
+      
+      const followingPromises = theFollowing.map(async (user) => {
+        const userDetails = await fetchUserDetails(user.followedID);
+        return {
+          followedID: user.followedID,
+          username: userDetails.username,
+          displayName: userDetails.displayName,
+          avatar: userDetails.avatar || '',
+        };
+      });
+      
+      const followingsWithDetails = await Promise.all(followingPromises);
+      setFollowing(followingsWithDetails);
+      
+    } catch (error) {
+      
+      console.error('Error fetching following:', error);
+    }
+  };
+  
+  const fetchFollowers = async () => {
+    if (!userData || !userData.userID) {
+      return; // Exit if userData is not ready
+    }
+
+    try {
+      const response = await fetch(`http://3.140.132.61/api/following-me/${userData?.userID}/`);
+      const theFollower = await response.json();
+
+      const userPromises = theFollower.map(async (user) => {
+        const userDetails = await fetchUserDetails(user.followerID);
+        return {
+          followerID: user.followerID,
+          username: userDetails.username,
+          displayName: userDetails.displayName,
+          avatar: userDetails.avatar || '',
+        };
+      });
+
+      const friendsWithDetails = await Promise.all(userPromises);
+      setFollower(friendsWithDetails);
+    } catch (error) {
+      console.error('Error fetching followers:', error);
+    }
+  };
+
+  // Fetch friends when user data is available
+  useEffect(() => {
+    fetchFriends();
+    fetchFollowing();
+    fetchFollowers();
+  }, [userData]);
+
+  return (
+    
+    <div className={`friends-page theme-${darkMode ? 'dark' : 'light'}`}>
+
+      {/* Minimal Header */}
+      {/* <header className="nav-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          &larr; Back
+        </button>
+        
+        <button className="home-button" onClick={() => navigate('/')}>
+          Home
+        </button>
+      </header> */}
+
+      <header className="friends-header">
+        <h1>Your Friends</h1>
+      </header>
+
+      <div className="friends-content">
+        <div className="friend-list-container">
+          <FriendList friends={friends} />
+        </div>
+      </div>
+      
+      
+      <header className="friends-header">
+        <h1>Following</h1>
+      </header>
+
+      <div className="friends-content">
+        <div className="friend-list-container">
+          <FriendList friends={following} />
+        </div>
+      </div>
+      
+      <header className="friends-header">
+        <h1>Your Followers</h1>
+      </header>
+
+      <div className="friends-content">
+        <div className="friend-list-container">
+          <FriendList friends={follower} />
+        </div>
+      </div>
+      
+      
+    </div>
+  );
+};
+
+// FriendList Component
+const FriendList = ({ friends }) => {
+  
+  const navigate = useNavigate();
+
+  const handleFriendClick = (username) => {
+    // Navigate to the profile page of the clicked friend
+    navigate(`/profile/${username}`);
+  };
+  
+  const renderFriends = () => {
+    return friends.map((friend) => {
+        // Create a unique key by combining followerID and username
+        const uniqueKey = `${friend.followerID}-${friend.username}`;
+
+        return (
+            <div key={uniqueKey} className="friend-list-item" onClick={() => handleFriendClick(friend.username)}>
+                <div className="friend-avatar">
+                    {friend.avatar ? (
+                        <img src={friend.avatar} alt={friend.username} />
+                    ) : (
+                        <div className="avatar-placeholder">{friend.username.charAt(0).toUpperCase()}</div>
+                    )}
+                </div>
+                <div className="friend-details">
+                    <div className="friend-displayName">{friend.displayName || 'Unknown'}</div>
+                    <div className="friend-username">@{friend.username}</div>
+                </div>
+            </div>
+        );
+    });
+  };
+
+  return <div className="friend-list">{renderFriends()}</div>;
+};
+
+export default FriendsPage;

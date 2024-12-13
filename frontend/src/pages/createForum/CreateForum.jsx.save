@@ -1,0 +1,79 @@
+import { Link } from "react-router-dom";
+import "./CreateForum.scss";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+//import Comments from "../comments/Comments";
+
+const apiRegister = "http://3.140.132.61/api/create-forum/";
+
+const CreateForum = ({ post }) => {
+    const [title, setTitle] = useState("");
+    const [userID, setUserID] = useState("");
+    const [upvotes, setUpvotes] = useState(0);
+    const [downvotes, setDownvotes] = useState(0);
+    const [mainBody, setMainBody] = useState("");
+    const [subredditID, setSubredditID] = useState(null); 
+    const navigate = useNavigate(); 
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (title.trim() === "" || mainBody.trim() === "") {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        const data = {
+            title,
+            mainBody,
+        };
+
+        try {
+            const response = await fetch(apiRegister, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                navigate("/create-forum");
+            } else {
+                console.log("Registration failed");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    return (
+        <div className="post"> 
+            <div className="container">
+                <div className="user">
+                    <div className="userInfo">
+                        <img src={post.profilePic} alt="" />
+                        <div className="details">
+                            <Link
+                                to={`/profile/${post.userId}`}
+                                style={{ textDecoration: "none", color: "inherit" }}
+                            >
+                                <span className="name">{post.name}</span>
+                            </Link>
+                            <span className="date">1 min ago</span>
+                        </div>
+                    </div>
+                    <MoreHorizIcon />
+                </div>
+                <div className="content">
+                    <p>{post.desc}</p>
+                    <img src={post.img} alt="" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default CreateForum;

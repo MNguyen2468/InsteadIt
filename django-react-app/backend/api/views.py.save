@@ -1,0 +1,537 @@
+# Path to this file /home/ec2-user/Demo-Web/django-react-app/backend/api/views.py
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, JsonResponse
+from django.views import View
+from .models import *
+import base64
+
+# imports for register
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
+
+# imports for login
+from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+import json
+
+# imports for protected view; READ THE FUNCTION
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes 
+
+# imports for create-forum
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+import logging
+
+#imports for chat/messages
+from django.db.models import Q
+
+def hello_view(request):
+    return JsonResponse({'message': 'Hello, World!'})
+
+class HelloWorldView(View):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'message': 'Hello, World!'})
+
+# New view for showing data
+def show_data(request):
+    data = Members.objects.all()  # Fetch all records
+    data_list = [str(record) for record in data]  # Convert each record to string
+    return HttpResponse("<br>".join(data_list))  # Display data in a simple format
+
+def get_photo_data(photo):
+    """Helper function to convert a Photo object to a dictionary."""
+    image_base64 = base64.b64encode(photo.image).decode('utf-8') if photo.image else None  # Convert binary to base64
+    return {
+        'photoID': photo.photoID,
+        'image': image_base64,  # Base64 encoded image data
+        'size': photo.size,
+        'width': photo.w,  # Width of the image
+        'height': photo.h,  # Height of the image
+        'dateUpload': photo.dateUpload.isoformat(),  # Ensure the date is formatted for JSON
+        'description': photo.description,  # Description of the photo
+    }
+
+def get_video_data(video):
+    """Helper function to convert video object to dictionary."""
+    video_base64 = base64.b64encode(video.video).decode('utf-8') if video.video else None  # Convert binary to base64
+    return {
+        'videoID': video.videoID,
+        'video': video_base64,  # Base64 encoded video data
+        'size': video.size,
+        'videoLength': video.videoLength,  # Length of the video
+        'resolution': video.resolution,  # Video resolution
+        'dateUpload': video.dateUploade.isoformat(),  # Corrected field name to match model
+    }
+
+# New API endpoint for React
+def get_table_data(request):
+    members_data = list(Members.objects.values())  # Convert queryset to list of dictionaries
+
+    # Retrieve data from database
+    # = list(.objects.values())
+    user_data = list(User.objects.values())
+    followingSubreddit_data = list(FollowingSubreddit.objects.values())
+    followingUser_data = list(FollowingUser.objects.values())
+    ban_data = list(Ban.objects.values())
+    forum_data = list(Forum.objects.values())
+    
+    # Retrieve photo data with conversion
+    photo_queryset = Photo.objects.all()
+    photo_data = [get_photo_data(photo) for photo in photo_queryset]
+
+    subreddit_data = list(Subreddit.objects.values())
+    comment_data = list(Comment.objects.values())
+    messages_data = list(Messages.objects.values())
+    
+    # Retrieve photo data with conversion
+    video_queryset = Video.objects.all()
+    video_data = [get_video_data(video) for video in video_queryset]
+    
+    gallery_data = list(Gallery.objects.values())
+# Combine both datasets into a dictionary
+    response_data = {
+        'members': members_data,
+        'user': user_data,
+        'followingSubreddit' : followingSubreddit_data,
+        'followingUser' : followingUser_data,
+        'ban' : ban_data,
+        'forum' : forum_data,
+	'photo' : photo_data,
+	'subreddit' : subreddit_data,
+	'comment' : comment_data,
+	'messages' : messages_data,
+	'video' : video_data,
+	'gallery' : gallery_data,
+    }
+
+    return JsonResponse(response_data, safe=False)
+
+@api_view(['POST'])
+def register_user(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        display_name = request.data.get('name')
+
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate userID manually (e.g., max userID + 1)
+        max_id = User.objects.aggregate(max_id=models.Max('userID'))['max_id'] or 0
+        new_user_id = max_id + 1
+
+        user = User(userID=new_user_id, username=username, email=email, displayName=display_name)
+        user.set_password(password)  # Set the hashed password
+        user.save()
+        return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+
+
+
+
+class LoginView(APIView):
+    def post(self, request):
+        try:
+            data = request.data
+            username = data.get('username')
+            password = data.get('password')
+
+            if not username or not password:
+                return Response({'message': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                return Response({'message': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+            # Ensure password check works properly
+            if not user.check_password(password):
+                return Response({'message': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+            # Token generation for the user
+            try:
+                refresh = RefreshToken.for_user(user)
+                #print(f"Token generated successfully: refresh={str(refresh)}, access={str(refresh.access_token)}")
+            except Exception as e:
+                print(f"Token generation failed: {str(e)}")
+                return Response({'message': 'Token generation failed.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            # Return tokens and user information
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user_id': user.userID,  # Return the userID instead of id
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # Log any unexpected errors
+            print(f"Unexpected error during login: {str(e)}")
+            return Response({'message': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+'''
+# Protected View
+# This function is a placeholder/example for what protected view stands for
+# This function will only allow access to the view if the user is authenicatedcated and the token is valid.
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def protected_view(request):
+    return Response({'message': 'This is a protected view!'})
+'''
+
+
+#Jahdon's Changes
+@api_view(['POST'])
+def create_forum_entry(request):
+    if request.method == 'POST':
+        data = request.data
+        ttl = data.get('title')
+        user_id = data.get('userID')
+        main_body = data.get('mainBody')
+
+        # Get the maximum existing forumID and increment it
+        max_id = Forum.objects.aggregate(max_id=models.Max('forumID'))['max_id'] or 0
+        new_forum_id = max_id + 1
+
+        # Create a new forum entry in the database
+        new_forum = Forum(
+            forumID=new_forum_id,  # Manually set the forumID
+            title=ttl,
+            userID_id=user_id,  # Use userID_id to set the foreign key
+            mainBody=main_body,
+            upvotes=0,  # Assuming you want to initialize this
+            downvotes=0,  # Assuming you want to initialize this
+            subredditID=None,  # Set to None if you're ignoring this field
+        )
+        
+        # Save the new forum entry
+        new_forum.save()
+
+        return Response({'message': 'Forum created successfully'}, status=status.HTTP_201_CREATED)
+    
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+#Jahdon's Changes
+@api_view(['Post'])
+def create_subreddit_entry(request):
+    if request.method == 'POST':
+        subreddit_id = data.get('subredditID')
+        ttl = data.get('title')
+        user_id = data.get('userID')
+        descr = data.get('description')
+
+        if Subreddit.objects.filter(title = ttl).exists():
+            return Response({'error': 'Subreddit title already taken'}, status=status.HTTP_400_BAD_REQUEST)
+
+        max_id = Subreddit.objects.aggregate(max_id = models.Max('subredditID'))['max_id'] or 0
+        new_subreddit_id = max_id + 1
+
+        subreddit = Subreddit(subredditID = new_subreddit_id, title = ttl, userID = user_id, description = descr)
+        subreddit.save()
+        
+        return Response({'message': 'Subreddit created successfullly'}, status = status.HTTP_201_CREATED)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_user_data(request, un):
+    try:
+        # Fetch the user by their username
+        user = User.objects.get(username=un)
+        
+        # Prepare the response data
+        user_data = {
+            'userID': user.userID,
+            'username': user.username,
+            'email': user.email,
+            'displayName': user.displayName,
+            'bio': user.bio,
+            'profilePicture': user.profilePicture
+        }
+
+        return Response(user_data, status=status.HTTP_200_OK)
+    
+    except User.DoesNotExist:
+        return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_userid_data(request, uid):
+    try:
+        # Fetch the user by their userID
+        user = User.objects.get(userID=uid)
+
+        # Prepare the response data
+        user_data = {
+            'userID': user.userID,
+            'username': user.username,
+            'email': user.email,
+            'displayName': user.displayName,
+            'bio': user.bio,
+            'profilePicture': user.profilePicture
+        }
+
+        return Response(user_data, status=status.HTTP_200_OK)
+    
+    except User.DoesNotExist:
+        return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+def update_user_profile(request, userID):
+    try:
+        # Fetch the user by userID
+        user = get_object_or_404(User, userID=userID)
+
+        # Only update the fields you want to allow
+        displayName = request.data.get('displayName')
+        bio = request.data.get('bio')
+
+        if displayName is not None:
+            user.displayName = displayName
+        if bio is not None:
+            user.bio = bio
+
+        user.save()  # Save the updated user instance
+
+        # Prepare the response data
+        user_data = {
+            'userID': user.userID,
+            'username': user.username,
+            'email': user.email,
+            'displayName': user.displayName,
+            'bio': user.bio,
+            'profilePicture': user.profilePicture,
+        }
+
+        return Response(user_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_mutual_followers(request, user_id):
+    try:
+        # Get the users that the specified user is following
+        followed_users = FollowingUser.objects.filter(followerID=user_id).values_list('followedID', flat=True)
+
+        # Get mutual followers by filtering for those who also follow back
+        mutual_followers = FollowingUser.objects.filter(
+            followedID=user_id,         # Users who follow the current user
+            followerID__in=followed_users  # These users should be in the list of users followed by the current user
+        ).values('followerID')
+
+        # Prepare the response data
+        mutual_followers_data = [{'followerID': following['followerID']} for following in mutual_followers]
+
+        return Response(mutual_followers_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_chat_messages(request, sender_id, receiver_id):
+    try:
+        # Fetch messages between the sender and receiver
+        messages = Messages.objects.filter(
+            (Q(senderID=sender_id) & Q(receiverID=receiver_id)) |
+            (Q(senderID=receiver_id) & Q(receiverID=sender_id))
+        ).order_by('messageID').values('messageID', 'text', 'photoID', 'videoID', 'senderID', 'receiverID')
+
+        # Prepare the response data
+        messages_data = list(messages)
+
+        return Response({'messages': messages_data}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def create_message(request):
+    if request.method == 'POST':
+        data = request.data
+        text = data.get('text')
+        sender_id = data.get('senderID')
+        receiver_id = data.get('receiverID')
+        photo_id = data.get('photoID', None)  # Optional, can be null
+        video_id = data.get('videoID', None)  # Optional, can be null
+
+        # Get the maximum existing messageID and increment it
+        max_id = Messages.objects.aggregate(max_id=models.Max('messageID'))['max_id'] or 0
+        new_message_id = max_id + 1
+
+        # Create a new message entry in the database
+        new_message = Messages(
+            messageID=new_message_id,  # Manually set the messageID
+            text=text,
+            senderID_id=sender_id,  # Use senderID_id to set the foreign key
+            receiverID_id=receiver_id,  # Use receiverID_id to set the foreign key
+            photoID_id=photo_id,  # Use photoID_id to set the foreign key (optional)
+            videoID_id=video_id,  # Use videoID_id to set the foreign key (optional)
+        )
+
+        # Save the new message entry
+        new_message.save()
+
+        return Response({'message': 'Message sent successfully'}, status=status.HTTP_201_CREATED)
+    
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def is_following(request, logged_in_username, username):
+    try:
+        # Get the current user and the user to check
+        logged_in_user = get_object_or_404(User, username=logged_in_username)
+        target_user = get_object_or_404(User, username=username)
+
+        # Check if the logged-in user is following the target user
+        is_following = FollowingUser.objects.filter(
+            followerID=logged_in_user,
+            followedID=target_user
+        ).exists()
+
+        return JsonResponse({'isFollowing': is_following}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return JsonResponse({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+def unfollow_user(request, logged_in_username, username):
+    try:
+        # Get the current user and the user to unfollow
+        logged_in_user = get_object_or_404(User, username=logged_in_username)
+        target_user = get_object_or_404(User, username=username)
+
+        # Find the following relationship
+        following_entry = FollowingUser.objects.filter(
+            followerID=logged_in_user,
+            followedID=target_user
+        ).first()
+
+        if following_entry:
+            following_entry.delete()
+            return JsonResponse({'message': 'Unfollowed successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return JsonResponse({'message': 'Not following the user.'}, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return JsonResponse({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def follow_user(request, logged_in_username, username):
+    try:
+        # Get the current user and the user to follow
+        logged_in_user = get_object_or_404(User, username=logged_in_username)
+        target_user = get_object_or_404(User, username=username)
+
+        # Check if the following entry already exists
+        existing_follow = FollowingUser.objects.filter(
+            followerID=logged_in_user,
+            followedID=target_user
+        ).first()
+
+        if existing_follow:
+            return JsonResponse({'message': 'Already following the user.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get the maximum existing followingUserID and increment it
+        max_id = FollowingUser.objects.aggregate(max_id=models.Max('followingUserID'))['max_id'] or 0
+        new_following_id = max_id + 1
+
+        # Create a new following entry
+        FollowingUser.objects.create(
+            followingUserID=new_following_id,
+            followerID=logged_in_user,
+            followedID=target_user
+        )
+
+        return JsonResponse({'message': 'Followed successfully.'}, status=status.HTTP_201_CREATED)
+
+    except Exception as e:
+        return JsonResponse({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_user_following(request, user_id):
+    try:
+        # Get the users who are followed by the specified user
+        following = FollowingUser.objects.filter(followerID=user_id).values_list('followedID', flat=True)
+
+        # Get the users that the current user is following (to exclude them)
+        userIsFollowed = FollowingUser.objects.filter(followedID=user_id).values_list('followerID', flat=True)
+
+        # Get users who follow the current user but the current user is not following them back
+        filteredFollowing = following.exclude(followedID__in=userIsFollowed)
+
+        # Prepare the response data
+        filteredFollowing_data = [{'followedID': followedID} for followedID in filteredFollowing]
+
+        return Response(filteredFollowing_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_following_me(request, user_id):
+    try:
+        # Get the users who are following the specified user
+        followedBy = FollowingUser.objects.filter(followedID=user_id).values_list('followerID', flat=True)
+
+        # Get the users that the current user is following (to exclude them)
+        userIsFollowing = FollowingUser.objects.filter(followerID=user_id).values_list('followedID', flat=True)
+
+        # Get users who follow the current user but the current user is not following them back
+        filteredFollowers = followedBy.exclude(followerID__in=userIsFollowing)
+
+        # Prepare the response data
+        filteredFollowers_data = [{'followerID': followerID} for followerID in filteredFollowers]
+
+        return Response(filteredFollowers_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# "start" is inclusive, "end" is exclusive 
+@api_view(['GET'])
+def get_recent_forum(request, subbreddit_id, start, end):
+    try:
+        if subbreddit_id == 0:
+            # Get the most recent forums across all subreddits
+            recent_forums = Forum.objects.all().order_by('-forumID')
+        else:
+            # Get the most recent forums for the specified subreddit
+            recent_forums = Forum.objects.filter(subredditID=subbreddit_id).order_by('-forumID')
+        
+        # Calculate the actual end index
+        if start >= recent_forums.count():
+            recent_forums = []
+        else:
+            actual_end = min(end, recent_forums.count())
+            recent_forums = recent_forums[start:actual_end]
+        
+        # Serialize the forum data
+        if not recent_forums:
+            return Response([], status=status.HTTP_200_OK)
+        forum_data = [{
+            'forumID': forum.forumID,
+            'title': forum.title,
+            'upvotes': forum.upvotes,
+            'downvotes': forum.downvotes,
+            'mainBody': forum.mainBody,
+            'userID': forum.userID.userID,
+            'subredditID': forum.subredditID.subredditID
+        } for forum in recent_forums]
+        
+        return Response(forum_data, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({'message': f'Error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

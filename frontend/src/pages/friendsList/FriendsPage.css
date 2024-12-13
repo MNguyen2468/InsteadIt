@@ -1,0 +1,314 @@
+/* Global styles */
+.friends-page .leftBar {
+  flex: 1; /* Shrink the left bar */
+  max-width: 200px; /* Set a max width */
+  font-family: 'Georgia';
+}
+.friends-page .leftBar .container {
+  padding: 10px; /* Reduce padding for a smaller appearance */
+}
+
+.friends-page .leftBar .container .menu span,
+.friends-page .leftBar .container .menu .user span {
+  font-size:22px; /* Reduce font size */
+}
+
+.friends-page .leftBar .container .menu .item img,
+.friends-page .leftBar .container .menu .user img {
+  width: 24px; /* Reduce image size */
+  height: 24px;
+}
+
+
+/*Button styling */
+.friends-header button {
+  margin: 0 20px;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 20px;
+  transition: background-color 0.3s, color 0.3s;  /* Smooth color transition */
+  border-radius: 30px;
+}
+.friends-header button.active {
+  color: #fff;
+  background-color: #663399;
+}
+
+body, html {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 10px solid #ccc;
+}
+.nav-header.theme-dark {
+  background-color: #2e2e2e;
+  border-bottom: 1px solid #444;
+}
+.nav-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+.nav-header h1.theme-dark {
+  color: #ddd;
+}
+.nav-header .back-button,
+.nav-header .home-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+.nav-header .back-button:hover,
+.nav-header .home-button:hover {
+  text-decoration: underline;
+}
+.nav-header .back-button.theme-dark,
+.nav-header .home-button.theme-dark {
+  color: #66b0ff;
+}
+
+.friends-content {
+  display: flex;
+  justify-content: flex-start; /* Align content at the top */
+  flex-direction: column; /* Ensure content is stacked vertically */
+  width: 100%;
+  height: auto; /* Allow height to adjust based on content */
+  padding: 0; /* Remove any extra padding */
+}
+
+/* Friends Page Styles */
+.friends-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;/*#f0f0f0;*/
+}
+
+/* Friends Header */
+.friends-header {
+  /* border-radius: 15px; */
+  display: flex;
+  /* justify-content: space-between; */
+  justify-content: center;
+  align-items: center;
+  /* padding: 10px 20px; */
+  width: 100%;
+  padding: 20px 0px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.friends-header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #333;
+}
+
+.friends-content {
+  display: flex;
+  justify-content: center; /* Center the container */
+  align-items: center; /* Center items vertically */
+  width: 100%; /* Full width */
+}
+
+/* Friends List */
+.friend-list {
+  margin: 0; /* Remove any margin */
+  padding: 0; /* Remove padding to prevent extra space */
+  display: flex; /* Add this */
+  flex-direction: column;
+  /*align-items: center; Centers all friend items */
+  width: 100%;
+  min-width: 250px;
+  max-width: 900px;
+  background-color: rgb(255, 255, 255);
+  /* background-color: transparent; */
+  /*border-right: 1px solid #ccc;*/
+  overflow-y: auto;
+}
+
+.friend-list-container {
+  display: flex;
+  flex-direction: column; /* Stack header and list vertically */
+  align-items: center; /* Center align the content horizontally */
+  width: 100%; /* You can adjust this width to match your design */
+  max-width: 900; /* Optional: Set a max width */
+  margin: 0 ; /* Center the container */
+  flex-grow: 1; /* Allow it to grow with content */
+  height: auto; /* Ensure no fixed height so it adjusts with content */
+}
+.friend-list-item {
+  border-radius: 15px;
+  flex-direction: horizontal;
+  align-items: center; /* Centers all friend items */
+  padding: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: flex;
+  align-items: center;
+}
+.friend-list-item:hover {
+  background-color: #e6e6e6;
+}
+.friend-list-item.active {
+  background-color: #d9d9d9;
+}
+
+/* Friend Avatar */
+.friend-avatar {
+  margin-right: 10px;
+}
+.friend-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+.avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+  color: #fff;
+  font-size: 36px;
+}
+
+/* Friend Details */
+.friend-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; /* Adjust this value to control the space between elements */
+}
+.friend-displayName {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+.friend-username {
+  font-size: 24px;
+  color: #666;
+  margin: 0 ;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+/* Dark mode styles */
+.friends-page.theme-dark {
+  background-color:  #292929;
+  color: #ffffff;
+}
+
+/* Dark mode header */
+.friends-page.theme-dark .friends-header {
+  background-color: #292929;
+  border-bottom-color: #1a1a1a;
+}
+
+/* Dark mode buttons */
+.friends-page.theme-dark .friends-header button {
+  background-color: #505050;
+  color: white;
+}
+
+.friends-page.theme-dark .friends-header button.active {
+  background-color: rgb(193, 190, 255);/*#ffffff;*/
+  color: #000000;
+  border: 2px solid #404040; /* Optional: adds a border to show active state */
+}
+
+.friends-page.theme-dark .friends-header button:hover {
+  background-color: rgb(193, 190, 255);/*#e0e0e0;*/ /* Optional: lighter grey on hover */
+}
+
+/* Dark mode friend list */
+.friends-page.theme-dark .friend-list {
+  background-color: #292929;
+  border-color: #404040;
+}
+
+.friends-page.theme-dark .friend-list-item {
+  border-color: #404040;
+  color: #ffffff;
+}
+
+.friends-page.theme-dark .friend-list-item:hover {
+  background-color: #2d2d2d;
+}
+
+.friends-page.theme-dark .friend-list-item.active {
+  background-color: #404040;
+}
+
+/* Dark mode friend details */
+.friends-page.theme-dark .friend-displayName {
+  color: #ffffff;
+}
+
+.friends-page.theme-dark .friend-username {
+  color: #cccccc;
+}
+
+/* Dark mode avatar placeholder */
+.friends-page.theme-dark .avatar-placeholder {
+  background-color: #404040;
+  color: #ffffff;
+}
+
+/* Dark mode loading and error messages */
+.friends-page.theme-dark .loading-message,
+.friends-page.theme-dark .error-message {
+  color: #cccccc;
+}
+
+/* Dark mode scrollbar */
+.friends-page.theme-dark ::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.friends-page.theme-dark ::-webkit-scrollbar-thumb {
+  background-color: #404040;
+}
+
+.friends-page.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #505050;
+}
+
+

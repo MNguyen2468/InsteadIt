@@ -1,0 +1,404 @@
+body, html {
+  overflow: hidden;  
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.subreddit-page {
+  min-height: 100%;
+  width: 100%;
+  background-color: rgb(193, 190, 255);
+}
+
+.feed-container {
+  padding: 20px;
+  padding-top: 20px;        
+  padding-bottom: 100px;    
+  position: relative;
+  margin-top: 0;
+}
+
+/* Subreddit Banner */
+.subreddit-banner {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  max-width: 900px; 
+}
+
+/* Subreddit Name */
+.subreddit-name h1 {
+  color: var(--textColor);
+  font-size: 30px;
+  margin-bottom: 2px;
+  text-align: left; 
+  width: 100%; 
+  margin-left:0;
+  padding-left: 50px;
+}
+
+/* Subreddit Description */
+.subreddit-description p {
+  color: var(--textColorSoft);
+  font-size: 20px;
+  margin-bottom: 1px;
+  max-width: 600px; 
+  margin-left: 0; 
+  padding-left: 50px;
+}
+
+/* Creator Section (with follow button) */
+.subreddit-creator-section {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%; 
+  max-width: 600px; 
+  margin-top: 10px;
+  padding-left: 50px;
+}
+
+/* Creator text styling */
+.subreddit-creator {
+  color: var(--textColorSoft);
+  font-size: 16px;
+  margin-right: 10px; 
+}
+
+/* Follow button */
+.follow-button {
+  padding: 8px 16px;
+  background-color: #007bff;  /* Blue color */
+  color: white;              /* White text for better contrast */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.follow-button:hover {
+  background-color: #0056b3;  /* Darker blue on hover */
+}
+
+/* Dark mode follow button - keep same colors for consistency */
+[data-theme='dark'] .follow-button {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .follow-button:hover {
+  background-color: #0056b3;
+}
+
+/* Floating button (fixed at the bottom right of the page) */
+.floating-button {
+  position: fixed;
+  bottom: 60px;
+  right: 50px;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%; /* Circular shape */
+  background-color: white;
+  color: black;
+  border: none;
+  font-size: 36px; 
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.floating-button:hover {
+  background-color: var(--secondaryColor);
+}
+
+/* Popup Styling */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; 
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 750px;
+  max-width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content h2 {
+  margin-bottom: 10px;
+}
+
+.popup-content textarea {
+  width: 100%;
+  height: 150px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.popup-content button {
+  padding: 8px 24px;
+  border: 1px solid black;
+  background-color: var(--primaryColor);
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.popup-content button:hover {
+  background-color: var(--secondaryColor);
+}
+
+/* Input and Textarea Styling */
+input[type="text"] {
+  width: 98%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+textarea {
+  height: 200px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.subreddit-pagination-controls {
+  position: fixed;
+  top: 160px;
+  right: 50px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.subreddit-pagination-controls button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background-color: #938eef;/*#007bff;*/
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.subreddit-pagination-controls button:hover {
+  background-color: #7a74d1;/*#ddd;*/
+}
+
+.subreddit-pagination-controls button:disabled {
+  cursor: not-allowed;
+}
+
+.subreddit-posts-per-page-input {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subreddit-posts-per-page-input label {
+  font-weight: bold;
+  color: black;
+  white-space: nowrap;
+}
+
+.subreddit-posts-input {
+  padding: 5px 10px;
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.no-forums-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.subreddit-posts-per-page-input {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subreddit-posts-input {
+  width: 100px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+}
+
+.subreddit-posts-per-page-input label {
+  font-weight: bold;
+  color: black;
+  white-space: nowrap;
+}
+
+.subreddit-posts-per-page-input input {
+  width: 100px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .subreddit-page {
+  background-color: #1a1a1a;  
+}
+
+[data-theme='dark'] .feed-container {
+  background-color: #1a1a1a;
+}
+
+[data-theme='dark'] .create-post-button {
+  background-color: #28bd7f;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .create-post-button:hover {
+  background-color: #1a8f5d;
+}
+
+[data-theme='dark'] .popup {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme='dark'] .popup-content {
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .popup-content input,
+[data-theme='dark'] .popup-content textarea {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: #404040;
+}
+
+
+[data-theme='dark'] .loading-message,
+[data-theme='dark'] .error-message,
+[data-theme='dark'] .no-forums-message {
+  color: #cccccc;
+}
+
+/* Dark mode banner styles */
+[data-theme='dark'] .subreddit-banner {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .subreddit-name h1 {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .subreddit-description p {
+  color: #cccccc;
+}
+
+[data-theme='dark'] .subreddit-creator {
+  color: #cccccc;
+}
+
+[data-theme='dark'] .subreddit-creator a {
+  color: #66b0ff;
+}
+
+[data-theme='dark'] .follow-button {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .follow-button:hover {
+  background-color: #0056b3;
+}
+
+/* Add dark mode style for body */
+[data-theme='dark'] body {
+  background-color: #000000;
+}
+
+/* Add button container for centering */
+.popup-buttons {
+  display: flex;
+  justify-content: center;  /* Center the buttons horizontally */
+  gap: 20px;               /* Space between buttons */
+}
+
+/* Update button styling */
+.popup-content button {
+  padding: 8px 24px;       /* Increased horizontal padding */
+  border: 1px solid black;
+  background-color: var(--primaryColor);
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0;              /* Remove margin, using gap instead */
+}
+
+/* Dark mode updates */
+[data-theme='dark'] .popup-content button {
+  border-color: #404040;
+  color: #ffffff;
+}
